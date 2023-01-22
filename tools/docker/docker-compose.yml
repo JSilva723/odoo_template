@@ -1,0 +1,38 @@
+version: '3'
+services:
+  db:
+    image: postgres:11
+    container_name: ${PROJECT_NAME}_pgdb11
+    environment:
+      - POSTGRES_PASSWORD=odoo
+      - POSTGRES_USER=odoo
+      - POSTGRES_DB=postgres
+    user: "${UID}:${GID}" # Linux users.
+    volumes:
+        - ${PWD}/volumes/postgresql:/var/lib/postgresql/data
+    ports:
+      - "5432:5432"
+    restart: always
+
+  odoo:
+    image: odoo:14.0
+    container_name: ${PROJECT_NAME}_odoo14
+    depends_on:
+      - db
+    ports:
+      - "8069:8069"
+      - "8072:8072"
+    tty: true
+    command: --dev=reload
+    environment:
+      - HOST=db
+      - USER=odoo
+      - PASSWORD=odoo
+      - PYTHONDONTWRITEBYTECODE=1
+    user: "${UID}:${GID}" # Linux users.
+    volumes:
+      - ${PWD}/extra-addons:/mnt/extra-addons
+      - ${PWD}/volumes/odoo-data:/mnt/odoo-data
+      - ${PWD}/tools/odoo-conf:/etc/odoo
+      - /dev/shm:/dev/shm
+    restart: always
