@@ -5,7 +5,7 @@ FIRST_COMMIT=$(git log --pretty=oneline --reverse | head -1 | awk '{print $1}')
 
 if [ $FIRST_COMMIT == 'aa3c48f769407db35744c707ed3e62f4bba1d72e' ];
 then
-    echo '***********************************  GIT INIT  *********************************************'
+    echo '**********************  START PROJECT WITH ODDO_TEMPLATE  **********************************'
     rm -rf .git
     git init
     git add .
